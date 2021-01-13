@@ -139,7 +139,8 @@ count_clock(27 Hz)을 따라감
  output [7:0] out_max;
 
 12. middle
-- 4개의 레지스터에 저장된 센서 값을 비교기를 통해 최대값 도출. 
+- 동작 개요
+4개의 레지스터에 저장된 센서 값을 비교기를 통해 최대값 도출. 
 새로운 4개의 레지스터에 최대값이 저장되었다가 비교기로 들어감.
 - 입력 신호
  input reset, clock, eoc;
@@ -149,3 +150,13 @@ count_clock(27 Hz)을 따라감
  output start, ale, oe;
  output [2:0] address;
  output [7:0] out_reg_1, out_reg_2, out_reg_3, out_reg_4;
+- 서브 모듈
+ first U17(reset, clock, adc_clock, eoc, adc_data, start, ale, oe, address, out_reg_1, out_reg_2, out_reg_3, out_reg_4);
+ cmpmax U18(out_reg_1, D_1, out_max_1, clock);
+ cmpmax U19(out_reg_2, D_2, out_max_2, clock);
+ cmpmax U20(out_reg_3, D_3, out_max_3, clock);
+ cmpmax U21(out_reg_4, D_4, out_max_4, clock);
+ SRregister U22(out_max_1, reset, clock, D_1);
+ SRregister U23(out_max_2, reset, clock, D_2);
+ SRregister U24(out_max_3, reset, clock, D_3);
+ SRregister U25(out_max_4, reset, clock, D_4);
